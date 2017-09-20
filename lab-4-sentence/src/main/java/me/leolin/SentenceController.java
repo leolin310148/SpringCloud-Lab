@@ -37,6 +37,7 @@ public class SentenceController {
         List<ServiceInstance> list = discoveryClient.getInstances(service);
         if (list != null && list.size() > 0) {
             URI uri = list.get(0).getUri();
+            System.out.println(uri);
             if (uri != null) {
                 return (new RestTemplate()).getForObject(uri, String.class);
             }
