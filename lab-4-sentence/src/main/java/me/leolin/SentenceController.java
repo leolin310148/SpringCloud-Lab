@@ -1,10 +1,10 @@
 package me.leolin;
 
+import me.leolin.client.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 /**
  * @author leo
@@ -13,23 +13,27 @@ import org.springframework.web.client.RestTemplate;
 public class SentenceController {
 
     @Autowired
-    private RestTemplate restTemplate;
+    private SubjectClient subjectClient;
+    @Autowired
+    private VerbClient verbClient;
+    @Autowired
+    private ArticleClient articleClient;
+    @Autowired
+    private AdjectiveClient adjectiveClient;
+    @Autowired
+    private NounClient nounClient;
 
     @GetMapping("/sentence")
     public @ResponseBody
     String getSentence() {
         return
-                getWord("LAB-4-SUBJECT") + " "
-                        + getWord("LAB-4-VERB") + " "
-                        + getWord("LAB-4-ARTICLE") + " "
-                        + getWord("LAB-4-ADJECTIVE") + " "
-                        + getWord("LAB-4-NOUN") + "."
+                subjectClient.getWord() + " "
+                        + verbClient.getWord() + " "
+                        + articleClient.getWord() + " "
+                        + adjectiveClient.getWord() + " "
+                        + nounClient.getWord() + "."
                 ;
     }
 
-    public String getWord(String service) {
-        System.out.println(service);
-        return restTemplate.getForObject("http://" + service, String.class);
-    }
 
 }
