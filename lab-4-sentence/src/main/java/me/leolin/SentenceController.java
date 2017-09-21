@@ -1,15 +1,10 @@
 package me.leolin;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cloud.client.ServiceInstance;
-import org.springframework.cloud.client.discovery.DiscoveryClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
-
-import java.net.URI;
-import java.util.List;
 
 /**
  * @author leo
@@ -18,7 +13,7 @@ import java.util.List;
 public class SentenceController {
 
     @Autowired
-    private DiscoveryClient discoveryClient;
+    private RestTemplate restTemplate;
 
     @GetMapping("/sentence")
     public @ResponseBody
@@ -34,15 +29,7 @@ public class SentenceController {
 
     public String getWord(String service) {
         System.out.println(service);
-        List<ServiceInstance> list = discoveryClient.getInstances(service);
-        if (list != null && list.size() > 0) {
-            URI uri = list.get(0).getUri();
-            System.out.println(uri);
-            if (uri != null) {
-                return (new RestTemplate()).getForObject(uri, String.class);
-            }
-        }
-        return null;
+        return restTemplate.getForObject("http://" + service, String.class);
     }
 
 }
